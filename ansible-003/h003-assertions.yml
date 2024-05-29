@@ -1,0 +1,34 @@
+---
+- name: H003-Assertions
+  connection: ansible.netcommon.network_cli
+  gather_facts: false
+  hosts: all
+  vars:
+    assert_vlans:
+      - "description"
+      - "name"
+  tasks:
+
+    - name: Gather information as structured data
+      cisco.ios.ios_facts:
+        gather_subset:
+          - "!all"
+          - "min"
+        gather_network_resources:
+          - interfaces
+
+    - name: Display the config
+      debug:
+        msg: "The hostname is {{ ansible_net_hostname }} and the OS is {{ ansible_net_version }}"
+
+    - name: Display the vlans
+      debug:
+        msg: "{{ ansible_network_resources.interfaces }}"
+
+    - name: Assert that interface is configured on the switch
+      ansible.builtin.assert:
+        that:
+          - 'item in ansible_network_resources.interfaces'
+      loop: "{{ assert_vlans }}"
+      loop_control:
+        label: "{{ item }}"

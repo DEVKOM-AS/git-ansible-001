@@ -1,0 +1,11 @@
+dm: #
+  switch01:
+    vlans:
+      - 3
+      - 4
+      - 5
+    bgp:
+      as: 65550
+    interfaces:
+      loopback99: 172.16.1.1/32
+      loopback98: 172.16.98.1/32

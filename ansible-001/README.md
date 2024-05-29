@@ -1,0 +1,1 @@
+ansible all -i  devnetsandboxiosxe.cisco.com, -c ansible.netcommon.network_cli -u admin -k -m cisco.ios.ios_facts -e ansible_network_os=cisco.ios.ios

@@ -1,0 +1,7 @@
+router bgp {{ dm[inventory_hostname].bgp.as }}
+ bgp router-id {{ dm[inventory_hostname].loopback0 | ansible.utils.ipaddr('address') }}
+ bgp log-neighbor-changes
+ !
+ address-family ipv4
+  network {{ dm[inventory_hostname].loopback0 | ansible.utils.ipaddr('address') }} mask {{ dm[inventory_hostname].loopback0 | ansible.utils.ipaddr('netmask') }}
+ exit-address-family

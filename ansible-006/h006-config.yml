@@ -1,0 +1,37 @@
+---
+- name: H006-Templates
+  connection: ansible.netcommon.network_cli
+  gather_facts: false
+  hosts: all
+  tasks:
+
+    - name: Fetch variables from datamodel
+      include_vars: ./dm.yml
+      
+    - name: Gather information as structured data
+      cisco.ios.ios_facts:
+        gather_subset: min
+
+    - name: Display the config
+      debug:
+        msg: "The hostname is {{ ansible_net_hostname }} and the OS is {{ ansible_net_version }}"
+
+    - name: Configure interface
+      cisco.ios.ios_l3_interfaces:
+        config:
+          - name: Loopback0
+            ipv4:
+              - address: "{{ dm[inventory_hostname].loopback0 }}"
+        state: merged
+
+    - name: Generate Config
+      template:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        mode: 0777
+      with_items:
+        - {src: 'template/bgp_router.j2',dest: 'bgp.config'}
+
+    - name: configure device with config from template
+      cisco.ios.ios_config:
+        src: template/bgp_router.j2

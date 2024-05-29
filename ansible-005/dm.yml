@@ -1,0 +1,6 @@
+dm:
+  switch01:
+    vlans:
+      - 3
+      - 4
+      - 5

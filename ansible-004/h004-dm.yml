@@ -1,0 +1,29 @@
+---
+- name:  H004-Variables and config
+  connection: ansible.netcommon.network_cli
+  gather_facts: false
+  hosts: all
+  tasks:
+
+    - name: Fetch variables from datamodel
+      include_vars: ./dm.yml
+      
+    - name: Gather information as structured data
+      cisco.ios.ios_facts:
+        gather_subset: all
+
+    - name: Display the config
+      debug:
+        msg: "The hostname is {{ ansible_net_hostname }} and the OS is {{ ansible_net_version }}"
+
+    - name: Merge provided configuration with device configuration
+      cisco.ios.ios_vlans:
+        config:
+          - name: "VLAN_{{ item }}"
+            vlan_id: "{{ item }}"
+            state: active
+            shutdown: enabled
+        state: merged
+      loop: "{{ dm[ansible_net_hostname].vlans }}"
+      loop_control:
+        label: "{{ ansible_net_hostname }} VLAN {{ item }}"

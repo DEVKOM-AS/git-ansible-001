@@ -1,0 +1,28 @@
+---
+- name: Pipeline
+  connection: ansible.netcommon.network_cli
+  gather_facts: false
+  hosts: all
+  tasks:
+
+    - name: Fetch variables from datamodel
+      include_vars: ./dm.yml
+      
+    - name: Gather information as structured data
+      cisco.ios.ios_facts:
+        gather_subset: min
+
+    - name: Display the config
+      debug:
+        msg: "The hostname is {{ ansible_net_hostname }} and the OS is {{ ansible_net_version }}"
+
+    - name: Configure interface
+      cisco.ios.ios_l3_interfaces:
+        config:
+          - name: "{{ item.key }}"
+            ipv4:
+              - address: "{{ item.value }}"
+        state: merged
+      loop: "{{ dm[inventory_hostname].interfaces | dict2items }}"
+      loop_control:
+        label: "{{inventory_hostname }} - {{ item.key }}"

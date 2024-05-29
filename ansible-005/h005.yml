@@ -1,0 +1,37 @@
+---
+- name: H005-Parsers and files
+  connection: ansible.netcommon.network_cli
+  gather_facts: false
+  hosts: all
+  tasks:
+
+    - name: Fetch variables from datamodel
+      include_vars: ./dm.yml
+      
+    - name: Gather information as structured data
+      cisco.ios.ios_facts:
+        gather_subset: all
+
+    - name: Display the config
+      debug:
+        msg: "The hostname is {{ ansible_net_hostname }} and the OS is {{ ansible_net_version }}"
+
+    - name: "Run command"
+      cisco.ios.ios_command:
+        commands: show vlan
+      register: vlans
+
+    - name: "Show information gathered"
+      ansible.builtin.debug:
+        msg: "{{ vlans }}"
+
+    - name: "Run command and parse"
+      ansible.utils.cli_parse:
+        command: show vlan
+        parser:
+          name: ansible.netcommon.ntc_templates
+        set_fact: vlans_parsed
+
+    - name: "Show information gathered from parser"
+      ansible.builtin.debug:
+        msg: "{{ vlans_parsed }}"
