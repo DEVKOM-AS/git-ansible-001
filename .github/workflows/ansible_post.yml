@@ -31,13 +31,8 @@ jobs:
           pip install --upgrade pip
           pip install -r ansible-git-pipeline/requirements.txt
 
-      # - name: Super-linter
-      #   uses: super-linter/super-linter@v6.5.1
-      #   env:
-      #     GITHUB_TOKEN: ${{ github.token }}
-
-      - name: Running ansible in diff mode
-        id: diff-run
+      - name: Running ansible in apply mode
+        id: apply-run
         working-directory: ansible-git-pipeline
         run: |
           export ANSIBLE_HOST_KEY_CHECKING=False
