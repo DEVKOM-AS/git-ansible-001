@@ -7,7 +7,7 @@ on:
     branches:
       - main
     paths:
-      - "ansible-git-pipeline/**"
+      - "ansible-git-pipeline/dm.yml"
   workflow_dispatch:
   
 jobs:
