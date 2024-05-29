@@ -4,9 +4,7 @@
   gather_facts: false
   hosts: all
   vars:
-    assert_vlans:
-      - "description"
-      - "name"
+    golden_os: "17.12.02"
   tasks:
 
     - name: Gather information as structured data
@@ -21,14 +19,11 @@
       debug:
         msg: "The hostname is {{ ansible_net_hostname }} and the OS is {{ ansible_net_version }}"
 
-    - name: Display the vlans
+    - name: Display the interfaces
       debug:
         msg: "{{ ansible_network_resources.interfaces }}"
 
-    - name: Assert that interface is configured on the switch
+    - name: Assert that switch is running our "golden os"
       ansible.builtin.assert:
         that:
-          - 'item in ansible_network_resources.interfaces'
-      loop: "{{ assert_vlans }}"
-      loop_control:
-        label: "{{ item }}"
+          - 'golden_os in ansible_net_version'
