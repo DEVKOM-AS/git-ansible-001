@@ -1,6 +1,15 @@
 dm:
-  cat8000v:
-    vlans:
-      - 3
-      - 4
-      - 5
+  DEMO-switch01:
+    config_interfaces:
+      - name: Loopback10
+        ipv4: 172.168.1.1/24
+      - name: Loopback11
+        ipv4: 172.168.10.1/24
+      - name: Loopback30
+        ipv4: 172.168.30.1/24
+  DEMO-switch02:
+    config_interfaces:
+      - name: Loopback20
+        ipv4: 172.168.1.1/24
+      - name: Loopback21
+        ipv4: 172.168.10.1/24

@@ -1,12 +1,4 @@
 ---
-
-# sandbox_switches:
-#   hosts:
-#     switch01:
-#       ansible_host: devnetsandboxiosxe.cisco.com
-#       ansible_connection: ansible.netcommon.network_cli
-#       ansible_network_os: cisco.ios.ios
-#       ansible_user: admin
 sandbox_switches:
   hosts:
     switch01:
@@ -14,8 +6,8 @@ sandbox_switches:
       ansible_connection: ansible.netcommon.network_cli
       ansible_network_os: cisco.ios.ios
       ansible_user: developer
-  # vars:
-  #   ansible_host: 10.10.20.48
-  #   ansible_connection: ansible.netcommon.network_cli
-  #   ansible_network_os: cisco.ios.ios
-  #   ansible_user: developer
+    switch02:
+      ansible_host: devnetsandboxiosxe.cisco.com
+      ansible_connection: ansible.netcommon.network_cli
+      ansible_network_os: cisco.ios.ios
+      ansible_user: admin

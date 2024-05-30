@@ -4,10 +4,10 @@
   gather_facts: false
   hosts: all
   vars:
-    config_vlans:
-      - 3
-      - 4
-      - 5
+    config_interfaces:
+      - Loopback55
+      - Loopback56
+      - Loopback57
   tasks:
 
     - name: Gather information as structured data
@@ -19,11 +19,8 @@
         msg: "The hostname is {{ ansible_net_hostname }} and the OS is {{ ansible_net_version }}"
 
     - name: Merge provided configuration with device configuration
-      cisco.ios.ios_vlans:
+      cisco.ios.ios_l3_interfaces:
         config:
-          - name: "VLAN_{{ item }}"
-            vlan_id: "{{ item }}"
-            state: active
-            shutdown: enabled
+          - name: "{{ item }}"
         state: merged
-      loop: "{{ config_vlans }}"
+      loop: "{{ config_interfaces }}"
