@@ -7,7 +7,10 @@
 
     - name: Fetch variables from datamodel
       include_vars: ./dm.yml
-      
+
+    - name: Fetch credentials
+      include_vars: ./creds.yml
+
     - name: Gather information as structured data
       cisco.ios.ios_facts:
         gather_subset: all

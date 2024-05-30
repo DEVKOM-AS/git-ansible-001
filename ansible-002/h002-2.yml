@@ -7,8 +7,6 @@
   tasks:
 
     - name: Get config for IOS-XE devices
-      # cisco.ios.ios_facts:
-      #   gather_subset: all
       cisco.ios.ios_facts:
         gather_subset: 
           - '!all'
@@ -19,10 +17,6 @@
     - name: Display the config
       debug:
         msg: "The hostname is {{ ansible_net_hostname }} and the OS is {{ ansible_net_version }}"
-
-    # - name: Display all facts
-    #   debug:
-    #     msg: "{{ ansible_net_config.split('\n') }}"
 
     - name: Display interfaces
       debug:

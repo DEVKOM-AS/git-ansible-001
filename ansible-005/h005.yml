@@ -4,15 +4,12 @@
   gather_facts: false
   hosts: all
   tasks:
-
-    - name: Fetch variables from datamodel
-      include_vars: ./dm.yml
       
     - name: Gather information as structured data
       cisco.ios.ios_facts:
         gather_subset: all
 
-    - name: Display the config
+    - name: Display hostname and OS
       debug:
         msg: "The hostname is {{ ansible_net_hostname }} and the OS is {{ ansible_net_version }}"
 
@@ -35,3 +32,8 @@
     - name: "Show information gathered from parser"
       ansible.builtin.debug:
         msg: "{{ vlans_parsed }}"
+
+    - name: "Show only vlan IDs"
+      ansible.builtin.debug:
+        msg: "{{ item.vlan_id }}"
+      loop: "{{ vlans_parsed }}"

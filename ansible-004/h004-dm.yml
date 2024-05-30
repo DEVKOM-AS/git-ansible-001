@@ -10,20 +10,21 @@
       
     - name: Gather information as structured data
       cisco.ios.ios_facts:
-        gather_subset: all
+        gather_subset: 
+          - '!all'
+          - min
 
-    - name: Display the config
+    - name: Display the hostname and OS
       debug:
         msg: "The hostname is {{ ansible_net_hostname }} and the OS is {{ ansible_net_version }}"
 
-    - name: Merge provided configuration with device configuration
-      cisco.ios.ios_vlans:
+    - name: Apply configuration from DM 
+      cisco.ios.ios_l3_interfaces:
         config:
-          - name: "VLAN_{{ item }}"
-            vlan_id: "{{ item }}"
-            state: active
-            shutdown: enabled
+          - name: "{{ item.name }}"
+            ipv4:
+              - address: "{{ item.ipv4 }}"
         state: merged
-      loop: "{{ dm[ansible_net_hostname].vlans }}"
-      loop_control:
-        label: "{{ ansible_net_hostname }} VLAN {{ item }}"
+      loop: "{{ dm[ansible_net_hostname].config_interfaces }}"
+      when:
+        - 'golden_os in ansible_net_version'
